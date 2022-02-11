@@ -129,11 +129,4 @@ mixin HiveStorageASyncMx<O, T, R> on HiveStorageSyncMx<O, T, R> {
 
   Future<Iterable<O>> fetchAllAsync() async =>
       await withSyncBox((syncBox) => syncBox.values.map<O>(cvRaw2Obj));
-
-  Future<O> saveAsync(dynamic id, O obj) async => await withSyncBoxAsync(
-        (syncBox) async {
-          await syncBox.put(id, cvObj2Raw(obj));
-          return obj;
-        },
-      );
 }
