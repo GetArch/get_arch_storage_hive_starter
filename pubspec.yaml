@@ -1,6 +1,6 @@
 name: get_arch_storage_hive_starter
 description: A new Flutter project.
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/GetArch/get_arch_storage_hive_starter.git
 
 environment:
