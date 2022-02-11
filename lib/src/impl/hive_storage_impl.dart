@@ -1,7 +1,5 @@
 import 'package:get_arch_core/get_arch_core.dart';
 import 'package:get_arch_storage_hive_starter/get_arch_storage_hive_starter.dart';
-import 'package:get_arch_storage_hive_starter/src/impl/mapper_impl.dart';
-import 'package:hive/hive.dart';
 
 /// 是抽象类
 /// 只定义接口, 还需要mixin其他的组件

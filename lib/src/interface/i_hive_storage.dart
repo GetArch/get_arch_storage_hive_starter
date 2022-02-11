@@ -1,5 +1,4 @@
 import 'package:get_arch_storage_hive_starter/get_arch_storage_hive_starter.dart';
-import 'package:hive/hive.dart';
 
 ///
 /// 无需实现

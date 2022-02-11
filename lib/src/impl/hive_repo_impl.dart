@@ -3,6 +3,7 @@ import 'package:get_arch_storage_hive_starter/get_arch_storage_hive_starter.dart
 
 ///
 /// 同步repo
+/// 在进入App之前(依赖注入时)会初始化, 如果数据量过大(100MB+), 建议使用同步repo
 class HiveRepo<Ag extends IAgg<Id>, Id> extends IHiveRepo<Ag, Id>
     with ICrudRepo<Ag, Id> {
   final HiveStorageSyncMx<Ag, Map<String, dynamic>, String> _storage;
@@ -61,6 +62,9 @@ class HiveRepo<Ag extends IAgg<Id>, Id> extends IHiveRepo<Ag, Id>
   }
 }
 
+///
+/// 异步repo
+/// 在首次查询的时候初始化数据
 class HiveAsyncRepo<Ag extends IAgg<Id>, Id> extends IHiveRepo<Ag, Id>
     with IAsyncCrudRepo<Ag, Id> {
   final HiveStorageASyncMx<Ag, Map<String, dynamic>, String> _storage;
