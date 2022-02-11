@@ -16,7 +16,7 @@ abstract class IHiveStorage<RawT> with IStorage<RawT> {
   /// see [withSyncBox] [withSyncBoxAsync]
   Future<Box<RawT>> get futureBox async => _box ??= await preInit();
 
-  // 如果在依赖注入时调用本方法,则可以使用 sync相关方法
+  /// 如果在依赖注入时调用本方法,则可以使用 sync相关方法
   Future<Box<RawT>> preInit({String? fileName}) async =>
       _box = await Hive.openBox<RawT>(
         fileName ?? "$runtimeType".replaceAll(RegExp('<|>'), '_'), // 使用类名作为文件名
@@ -24,4 +24,10 @@ abstract class IHiveStorage<RawT> with IStorage<RawT> {
         encryptionCipher:
             config.key == null ? null : HiveAesCipher(config.key!.codeUnits),
       );
+
+  /// 在实现类内部创建 静态inject方法,内部调用本方法即可实现无@module, @preResolve注入
+  Future<T> init<T extends IHiveStorage>() async {
+    await preInit();
+    return this as T;
+  }
 }
