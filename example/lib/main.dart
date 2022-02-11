@@ -77,6 +77,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          ElevatedButton(
+            onPressed: () => _fetchData(),
+            child: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       body: ListView.builder(
           itemCount: data.length,
@@ -85,6 +91,13 @@ class _MyHomePageState extends State<MyHomePage> {
             return ListTile(
               title: Text(p.name),
               subtitle: Text(p.age.toString()),
+              trailing: ElevatedButton(
+                child: const Text('删除'),
+                onPressed: () {
+                  sl<PersonRepo2>().delete(p);
+                  _fetchData();
+                },
+              ),
             );
           }),
       floatingActionButton: FloatingActionButton(
