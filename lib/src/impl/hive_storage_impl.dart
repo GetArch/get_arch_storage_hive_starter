@@ -1,4 +1,3 @@
-import 'package:get_arch_core/get_arch_core.dart';
 import 'package:get_arch_storage_hive_starter/get_arch_storage_hive_starter.dart';
 
 /// 是抽象类
@@ -49,7 +48,7 @@ class HiveStorageString extends BaseHiveStorage<String, String, String>
   HiveStorageString(StorageConfig config) : super(config);
 
   @override
-  String cvObj2Trans(String objT) => objT;
+  String Function(String obj) get cvObj2Trans => (_) => _;
 
   @override
   String cvRaw2Trans(String rawT) => rawT;
@@ -59,74 +58,4 @@ class HiveStorageString extends BaseHiveStorage<String, String, String>
 
   @override
   String Function(String transT) get cvTrans2Obj => (_) => _;
-}
-
-///
-/// 同步box
-/// Object(IDto) -> Map<String,dynamic> -> String
-/// 使用前务必调用 [await ::preInit()]
-class HiveStorage<Dto extends IDto>
-    extends BaseHiveStorage<Dto, Map<String, dynamic>, String>
-    with
-        HiveStorageSyncMx<Dto, Map<String, dynamic>, String>,
-        JsStrTRMapper,
-        DtoJsStringOTRMapper<Dto> {
-  @override
-  final Dto Function(Map<String, dynamic> transT) cvTrans2Obj;
-
-  HiveStorage(StorageConfig config, this.cvTrans2Obj) : super(config);
-}
-
-///
-/// 异步box
-/// 因为也会调用同步方法,所以混入[HiveStorageSyncMx]
-class HiveAsyncStorage<Dto extends IDto>
-    extends BaseHiveStorage<Dto, Map<String, dynamic>, String>
-    with
-        HiveStorageSyncMx<Dto, Map<String, dynamic>, String>,
-        HiveStorageASyncMx<Dto, Map<String, dynamic>, String>,
-        JsStrTRMapper,
-        DtoJsStringOTRMapper<Dto> {
-  @override
-  final Dto Function(Map<String, dynamic> transT) cvTrans2Obj;
-
-  HiveAsyncStorage(StorageConfig config, this.cvTrans2Obj) : super(config);
-}
-
-/// mixin
-
-/// Sync
-mixin HiveStorageSyncMx<O, T, R> on BaseHiveStorage<O, T, R> {
-  // save, delete 只有异步
-
-  int size({Box<R>? specificBox}) => (specificBox ?? syncBox).length;
-
-  bool existBy(dynamic id, {Box<R>? specificBox}) =>
-      (specificBox ?? syncBox).containsKey(id);
-
-  O? fetchBy(dynamic id, {O? defaultValue, Box<R>? specificBox}) {
-    final js = (specificBox ?? syncBox).get(id);
-    return cvRaw2ObjOr(js, defaultValue: defaultValue);
-  }
-
-  Iterable<O> fetchAll() => syncBox.values.map<O>((e) => cvRaw2ObjOr(e)!);
-}
-
-/// Async
-mixin HiveStorageASyncMx<O, T, R> on HiveStorageSyncMx<O, T, R> {
-  Future<int> sizeAsync({Box<R>? specificBox}) =>
-      withSyncBox((syncBox) => size(specificBox: syncBox));
-
-  Future<bool> existByAsync(dynamic id) async =>
-      withSyncBox((syncBox) => existBy(id, specificBox: syncBox));
-
-  Future<O?> fetchByAsync(dynamic id, {O? defaultValue}) async =>
-      await withSyncBox((syncBox) => fetchBy(
-            id,
-            defaultValue: defaultValue,
-            specificBox: syncBox,
-          ));
-
-  Future<Iterable<O>> fetchAllAsync() async =>
-      await withSyncBox((syncBox) => syncBox.values.map<O>(cvRaw2Obj));
 }

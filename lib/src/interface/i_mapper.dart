@@ -11,11 +11,13 @@ mixin TRMapper<TransT, RawT> on IStorage<RawT> {
 /// OTRMapper
 /// 可以有实现类,也可以直接混入,在实例化时传入转换方法
 mixin OTRMapper<ObjT, Trans, RawT> on TRMapper<Trans, RawT> {
-  ObjT Function(Trans transT) get cvTrans2Obj;
+  ObjT Function(Trans trans) get cvTrans2Obj;
 
-  Trans cvObj2Trans(ObjT objT);
+  Trans Function(ObjT obj) get cvObj2Trans;
 
-  RawT cvObj2Raw(ObjT objT) => cvTrans2Raw(cvObj2Trans(objT));
+  RawT Function(ObjT obj) get cvObj2Raw =>
+      (obj) => cvTrans2Raw(cvObj2Trans(obj));
 
-  ObjT cvRaw2Obj(RawT rawT) => cvTrans2Obj(cvRaw2Trans(rawT));
+  ObjT Function(RawT raw) get cvRaw2Obj =>
+      (raw) => cvTrans2Obj(cvRaw2Trans(raw));
 }
