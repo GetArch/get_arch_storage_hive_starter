@@ -58,6 +58,9 @@ class HiveStorageString extends BaseHiveStorage<String, String, String>
 
   @override
   String cvTrans2Raw(String transT) => transT;
+
+  @override
+  String Function(String transT) get cvTrans2Obj => (_) => _;
 }
 
 ///
