@@ -1,7 +1,9 @@
 # GetArchStorageHiveStarter
 
 ## 快速开始
+
 ### 配置文件示例
+通过 抽象@module 注入[StorageConfig],[HiveStorage]实现类
 ```dart
 @module
 abstract class StorageConfigInject {
@@ -34,7 +36,7 @@ abstract class StorageConfigInject {
 }
 ```
 
-### 持久化 protobuf.GenerateMessage
+### protobuf.GenerateMessage 的持久化(注意导入的依赖包名称)
 ```dart
 import 'package:commerce_client/src/generated/user.pb.dart';
 // 注意导入的依赖
@@ -47,12 +49,30 @@ class TokenStorage extends HiveStorage<TokenInfoRsp> {
 ```
 
 ## 介绍
+### 接口
+1. 底层存储类型持有类  String, Uint8List ...
+  [IStorage] - <RawT>
+  [IHiveStorage], 继承 [IStorage],提供原始数据读写能力
 
-1. 底层存储类型  String, Uint8List ...
-  [HiveStorageMx] - RawT
+2. 传输类型转换器 json(Map<String,dynamic>), byte(Uint8List) ...
+  [TRMapper] - TransT
+  实现类 [JsStrTRMapper]: [Map<String,dynamic>]->[String]
 
-2. 传输类型 json(Map<String,dynamic>), byte(Uint8List) ...
-  [TRMapper] - TransT,
-  具体实现类 [JsStrTRMapper]
+3. 对象转换器 Person, Student ... 
+  [OTRMapper] - ObjT
+  实现类 [DtoJsStringOTRMapper]: [IDo]->[Map<String,dynamic>]->[String] 
 
-3. 对象类型 Person, User ...
+4. 能力扩展(Mx)
+  [HiveStorageSyncMx]  : 同步读写方法
+  [HiveStorageASyncMx] : 异步读写方法
+
+5. Repo类
+   [IHiveCrudRepo] : 对类的CRUD操作
+
+### 实现
+1. Storage实现类
+  [HiveStorageString] : 只对String类作为Value进行读写
+  [HiveAsyncStorage],[HiveStorage]<T extends IDto> : 对实现了IDto方法的类提供读写能力
+
+2. Repo实现类
+  [HiveCrudRepo],[HiveAsyncRepo]: 包装了对象操作的CRUD方法
