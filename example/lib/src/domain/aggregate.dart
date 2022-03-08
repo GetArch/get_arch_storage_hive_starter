@@ -8,6 +8,7 @@ part 'aggregate.g.dart';
 /// Person 聚合根, ID类型为String
 @JsonSerializable()
 class Person extends IAgg<String> {
+  @override
   @JsonKey(name: 'id')
   String id;
 

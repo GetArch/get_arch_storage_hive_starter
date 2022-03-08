@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:example/src/config/const.dart';
-import 'package:example/src/config/injector.dart';
 import 'package:example/src/domain/aggregate.dart';
 import 'package:example/src/interface/person_repo.dart';
 import 'package:flutter/material.dart';
@@ -12,15 +11,37 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await GetArchApplication.run(kEnvDev, packages: [
-    ExamplePackage(), // 将您的Package放在第一行, 可以确保相关配置文件能够正常打印(这不影响程序运行)
+    ExamplePackage(
+      pkgConfig: SimplePackageConfig(
+        name: kAppName,
+        sign: kEnvDev.sign,
+        version: kPackageVersion,
+        packAt: kPackAt,
+      ),
+    ), // 将您的Package放在第一行, 可以确保相关配置文件能够正常打印(这不影响程序运行)
     GetArchStorageHiveStarter(),
   ]);
   runApp(const MyApp());
 }
 
-class ExamplePackage extends BaseGetArchPackage {
-  @override
-  InitPackageDI? get initPackageDI => configPackageDI;
+class ExamplePackage extends BaseSimplePackage {
+  ExamplePackage({
+    SimplePackageConfig? pkgConfig,
+    Future<void> Function(GetIt g, SimplePackageConfig c)? onBeforePkgInit,
+    Future<void> Function(GetIt g, SimplePackageConfig config)? onAfterPkgInit,
+    Future<void> Function(SimplePackageConfig config, Object e, StackTrace s)?
+        onPkgInitError,
+    Future<void> Function(SimplePackageConfig config)? onPkgInitFinally,
+    Future<void> Function(GetIt getIt, SimplePackageConfig config)?
+        onPackageInit,
+  }) : super(
+          pkgConfig,
+          onBeforePkgInit,
+          onAfterPkgInit,
+          onPkgInitError,
+          onPkgInitFinally,
+          onPackageInit,
+        );
 }
 
 class MyApp extends StatelessWidget {

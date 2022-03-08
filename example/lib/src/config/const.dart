@@ -5,13 +5,11 @@ import 'package:path/path.dart';
 
 const kAppName = "hive_starter_demo";
 const kPackageVersion = '1.0.0';
-final kBuildAt = DateTime(2022, 2, 11);
+final kPackAt = DateTime(2022, 2, 11);
 
-final kEnvDev = EnvConfig(kAppName, kPackageVersion, kBuildAt, EnvSign.dev);
-
-final kEnvTest = EnvConfig(kAppName, kPackageVersion, kBuildAt, EnvSign.test);
-
-final kEnvProd = EnvConfig(kAppName, kPackageVersion, kBuildAt, EnvSign.prod);
+final kEnvDev = GetArchCoreConfig(sign: EnvSign.dev);
+final kEnvTest = GetArchCoreConfig(sign: EnvSign.test);
+final kEnvProd = GetArchCoreConfig(sign: EnvSign.prod);
 
 const kProdStorageSecret = "sd1fg3sq4we9rb4shh2tj6as2er1glo5n";
 

@@ -1,6 +1,8 @@
-import 'package:example/src/interface/person_repo.dart';
 import 'package:get_arch_core/get_arch_core.dart';
-import 'package:get_arch_storage_hive_starter/get_arch_storage_hive_starter.dart';
+
+// import 'package:get_arch_storage_hive_starter/get_arch_storage_hive_starter.dart';
+import 'package:get_arch_storage_hive_starter/get_arch_storage_hive_string_impl.dart';
+
 import 'const.dart';
 
 ///
@@ -12,18 +14,23 @@ abstract class StorageConfigInject {
   @dev
   @test
   @preResolve
-  Future<StorageConfig> storageConfigDev(EnvConfig config) async {
-    final path = config.envSign.name;
-    return StorageConfig(basePath: await appSubDir(path));
+  Future<StorageConfig> storageConfigDev(GetArchCoreConfig config) async {
+    final path = config.sign.name;
+    return StorageConfig(
+      sign: config.sign,
+      basePath: await appSubDir(path),
+    );
   }
 
   /// prod 环境添加密码
   @prod
   @preResolve
-  Future<StorageConfig> storageConfigProd(EnvConfig config) async {
-    final path = config.envSign.name;
+  Future<StorageConfig> storageConfigProd(GetArchCoreConfig config) async {
+    final path = config.sign.name;
     return StorageConfig(
-        basePath: await appSubDir(path), key: kProdStorageSecret);
+        sign: config.sign,
+        basePath: await appSubDir(path),
+        key: kProdStorageSecret);
   }
 
   /// 配置好的Storage
@@ -34,12 +41,12 @@ abstract class StorageConfigInject {
     return storage;
   }
 
-  // ///
-  // /// 同步Repo, 必须使用 [@preResolve]注解注入, 否则会出错
-  // @preResolve
-  // Future<PersonRepo> personRepo(StorageConfig config) async {
-  //   final repo = PersonRepo(config);
-  //   await repo.preInit();
-  //   return repo;
-  // }
+// ///
+// /// 同步Repo, 必须使用 [@preResolve]注解注入, 否则会出错
+// @preResolve
+// Future<PersonRepo> personRepo(StorageConfig config) async {
+//   final repo = PersonRepo(config);
+//   await repo.preInit();
+//   return repo;
+// }
 }
