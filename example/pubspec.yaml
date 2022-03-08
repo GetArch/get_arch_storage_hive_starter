@@ -37,22 +37,21 @@ dependencies:
   get_arch_storage_hive_starter:
     path: ../
   path_provider:
-  json_serializable:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner:
   injectable_generator:
-  json_serializable_generator:
+  json_serializable:
   flutter_lints: ^1.0.0
 
 dependency_overrides:
   get_arch_core:
-    path:  ../../get_arch_core
-#    git:
-#      url: https://github.com/GetArch/get_arch_core.git
-#      ref: v3.0
+    path: ../../get_arch_core
+  #    git:
+  #      url: https://github.com/GetArch/get_arch_core.git
+  #      ref: v3.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
