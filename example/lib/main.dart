@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:example/src/config/const.dart';
+import 'package:example/src/config/injector.dart';
 import 'package:example/src/domain/aggregate.dart';
 import 'package:example/src/interface/person_repo.dart';
 import 'package:flutter/material.dart';
@@ -32,15 +33,13 @@ class ExamplePackage extends BaseSimplePackage {
     Future<void> Function(SimplePackageConfig config, Object e, StackTrace s)?
         onPkgInitError,
     Future<void> Function(SimplePackageConfig config)? onPkgInitFinally,
-    Future<void> Function(GetIt getIt, SimplePackageConfig config)?
-        onPackageInit,
   }) : super(
           pkgConfig,
           onBeforePkgInit,
           onAfterPkgInit,
           onPkgInitError,
           onPkgInitFinally,
-          onPackageInit,
+          initPackageDI,
         );
 }
 
